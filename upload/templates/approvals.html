@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SecShare</title>
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='favicon.png') }}">
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.png') }}">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: radial-gradient(circle at center, #1f1c2c, #302b63, #0f0c29);
+            color: #fff;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+            display: flex;
+            flex-direction: column; /* Stack elements vertically */
+            min-height: 100vh;      /* Ensure body height matches viewport */
+        }
+
+        .navbar {
+            width: 100%;
+            background: rgba(28, 28, 50, 0.8);
+            backdrop-filter: blur(10px);
+            padding: 10px 0;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 10;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.5);
+            height: 60px;
+        }
+
+        .navbar a {
+            color: #50c7f9;
+            text-decoration: none;
+            font-size: 18px;
+            font-weight: bold;
+            padding: 8px 20px;
+            border-radius: 10px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .navbar a:hover {
+            background-color: #50c7f9;
+            color: #fff;
+        }
+
+        .content {
+            flex: 1;
+            margin-top: 37px; /* Push below navbar */
+            padding: 40px 20px;
+        }
+
+        /* Container for heading + search + table, all at 80% width */
+        .table-container {
+            width: 80%;
+            margin: 0 auto; /* center horizontally */
+            text-align: left; /* Let’s left-align content in this section if desired */
+        }
+
+        /* Make the header row use a block layout so the h1 and search bar stack */
+        .header-row {
+            text-align: center;   /* match file_upload_history which centers h1 */
+            margin-bottom: 10px;    /* adjust spacing as needed */
+        }
+
+        .header-row h1 {
+            margin: 0;
+            font-size: 32px;        /* Use 32px if that matches file_upload_history’s default h1 size */
+            line-height: normal;
+            text-transform: none;
+            letter-spacing: normal;
+        }
+
+        /* Container for the search bar to match the 80% width and centering from file_upload_history */
+        .search-container {
+            width: 80%;
+            margin: 0 auto 20px auto;  /* 0 top, auto left/right, 20px bottom */
+            text-align: center;        /* center the search form if desired */
+        }
+
+        /* (Optional) Adjust the search form inputs to match file_upload_history style */
+        .search-form input[type="text"] {
+            padding: 8px;
+            border-radius: 4px;
+            border: 1px solid #555;
+            margin-right: 10px;
+            color: #000;
+        }
+
+        .search-form button {
+            padding: 8px 12px;
+            border: none;
+            border-radius: 4px;
+            background: #50c7f9;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .search-form {
+            display: flex;
+            align-items: center;
+        }
+
+
+        .search-form button:hover {
+            background-color: #1cb5e0;
+        }
+
+        table {
+            width: 100%; /* fill the entire .table-container width */
+            margin: 0 auto 40px auto;
+            border-collapse: collapse;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+            text-align: center;
+        }
+        th, td {
+            padding: 15px;
+            border: 1px solid #444;
+        }
+        th {
+            background-color: #50c7f9;
+            color: #fff;
+        }
+        td {
+            background-color: #1e1e1e;
+        }
+
+        button {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            background-color: #50c7f9;
+            color: #fff;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #1cb5e0;
+        }
+
+        .flash-success {
+            background-color: rgba(56, 142, 60, 0.95);
+            padding: 15px;
+            margin: 15px auto;
+            width: 80%;
+            border-radius: 10px;
+            color: white;
+            font-weight: bold;
+            font-size: 16px;
+            box-shadow: 0px 0px 10px rgba(56, 142, 60, 0.8);
+            animation: fadeIn 0.5s ease-out;
+            text-align: center;
+        }
+
+        .flash-error {
+            background-color: rgba(211, 47, 47, 0.95);
+            padding: 15px;
+            margin: 15px auto;
+            width: 80%;
+            border-radius: 10px;
+            color: white;
+            font-weight: bold;
+            font-size: 16px;
+            box-shadow: 0px 0px 10px rgba(211, 47, 47, 0.8);
+            animation: fadeIn 0.5s ease-out;
+            text-align: center;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .pagination {
+            width: 80%;
+            margin: 0 auto 1px auto; 
+            text-align: center;
+        }
+        .pagination a {
+            display: inline-block;
+            background-color: #50c7f9;
+            color: #fff;
+            padding: 8px 16px;
+            margin: 0 5px;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+        .pagination a:hover {
+            background-color: #1cb5e0;
+        }
+        .pagination span {
+            margin: 0 10px;
+            font-weight: bold;
+        }
+
+        .footer {
+            width: 100%;
+            text-align: center;
+            padding: 5px 0; /* reduced vertical padding */
+            background: rgba(28, 28, 50, 0.8);
+            backdrop-filter: blur(10px);
+            color: #aaa;
+            font-size: 14px;
+        }
+
+        .footer p {
+            margin: 0; /* remove default paragraph margins */
+        }
+
+        .footer a {
+            color: #50c7f9;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+        .loading-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            z-index: 1000;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .loading-overlay.active {
+            display: flex;
+        }
+
+        .spinner {
+            width: 80px;
+            height: 80px;
+            border: 8px solid rgba(80, 199, 249, 0.2);
+            border-top: 8px solid #50c7f9;
+            border-radius: 50%;
+            animation: spin 1.5s linear infinite;
+        }
+
+        .loading-text {
+            margin-top: 15px;
+            font-size: 20px;
+            color: #50c7f9;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const buttons = document.querySelectorAll(".approve-btn, .reject-btn");
+            const overlay = document.querySelector(".loading-overlay");
+
+            buttons.forEach(button => {
+                button.addEventListener("click", () => {
+                    overlay.classList.add("active");
+                });
+            });
+        });
+
+        setTimeout(function() {
+            const flashElements = document.querySelectorAll('.flash-success, .flash-error, .flash-message');
+            flashElements.forEach(function(el) {
+                el.style.transition = 'opacity 1s ease';
+                el.style.opacity = '0';
+                setTimeout(function() {
+                    el.remove();
+                }, 1000);
+            });
+        }, 3000);
+    </script>
+</head>
+<body>
+    <div class="navbar">
+        <a href="{{ url_for('appRoute.home') }}">Home</a>
+        <a href="{{ url_for('appRoute.history') }}">File Upload History</a>
+        <a href="{{ url_for('appRoute.approvals') }}">Approvals</a>
+    </div>
+
+    <div class="loading-overlay">
+        <div class="spinner"></div>
+        <div class="loading-text">Processing...</div>
+    </div>
+    
+    <div class="content">
+        <!-- Flash msg display -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="flash-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        
+        <div class="table-container">
+            <!-- Row for heading and search form -->
+            <div class="header-row" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 22px; margin-top: 30px;">
+                <h1 style="margin: 0; font-size: 32px;">Manager Approvals</h1>
+                <form class="search-form" method="GET" action="{{ url_for('appRoute.approvals') }}" style="margin: 0;">
+                  <input type="text" name="search" placeholder="Search by employee name..." value="{{ search }}">
+                  <button type="submit">Search</button>
+                </form>
+            </div>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>File Name</th>
+                        <th>Uploaded By</th>
+                        <th>Recipients</th>
+                        <th>Business Justification</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for approval in approvals %}
+                    <tr>
+                        <td>{{ approval.file_name }}</td>
+                        <td>{{ approval.uploaded_by }}</td>
+                        <td>{{ approval.recipients }}</td>
+                        <td>{{ approval.business_justification }}</td>
+                        <td>
+                            <div style="display: flex; gap: 10px; justify-content: center;">
+                                <!-- Approve Form -->
+                                <form action="{{ url_for('apiRoute.approve', unique_id=approval.unique_id) }}" method="POST" style="display: inline;">
+                                    <input type="hidden" name="password" value="{{ approval.manager_password }}">
+                                    <button type="submit" class="approve-btn">Approve</button>
+                                </form>
+                                <!-- Reject Form -->
+                                <form action="{{ url_for('apiRoute.reject', unique_id=approval.unique_id) }}" method="POST" style="display: inline;">
+                                    <input type="hidden" name="password" value="{{ approval.manager_password }}">
+                                    <button type="submit" class="reject-btn">Reject</button>
+                                </form>                            
+                            </div>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="5">No pending approvals</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>                                                    
+            </table>
+
+            {% if total_pages and total_pages > 1 %}
+            <div class="pagination">
+                {% if page > 1 %}
+                <a href="{{ url_for('appRoute.approvals', page=page-1, search=request.args.get('search', '')) }}">«</a>
+                {% endif %}
+
+                <span>Page {{ page }} of {{ total_pages }}</span>
+
+                {% if page < total_pages %}
+                <a href="{{ url_for('appRoute.approvals', page=page+1, search=request.args.get('search', '')) }}">»</a>
+                {% endif %}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="footer" style="text-align: center; padding: 17px 0; background: rgba(28, 28, 50, 0.8); backdrop-filter: blur(10px); color: #aaa; font-size: 14px;">
+        <p style="margin: 0;">⚠️ Please share responsibly. Do not upload sensitive or confidential files.</p>
+        <p style="margin: 6px 0 0;">Made with ❤️ by the Security Team</p>    
+    </div>
+</body>
+</html>

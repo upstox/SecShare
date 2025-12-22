@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Downloading...</title>
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='favicon.png') }}">
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.png') }}">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: radial-gradient(circle at center, #1f1c2c, #302b63, #0f0c29);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: #fff;
+            background-size: 200% 200%;
+            animation: gradientShift 15s ease infinite;
+        }
+
+        @keyframes gradientShift {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        .container {
+            background-color: #1e1e1e;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0px 15px 40px rgba(0, 0, 0, 0.6);
+            width: 450px;
+            text-align: center;
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+        }
+
+        .container:hover {
+            transform: scale(1.05);
+            box-shadow: 0 20px 50px rgba(80, 199, 249, 0.7);
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 600;
+            color: #50c7f9;
+            margin-bottom: 10px;
+            letter-spacing: 2.5px;
+            text-transform: uppercase;
+            text-shadow: 0 0 10px rgba(80, 199, 249, 0.8);
+        }
+
+        .divider {
+            width: 80px;
+            height: 3px;
+            background-color: #50c7f9;
+            margin: 20px auto;
+            border-radius: 2px;
+        }
+
+        h1 {
+            font-size: 22px;
+            margin-bottom: 20px;
+            color: #fff;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+        }
+
+        p {
+            font-size: 18px;
+            color: #fff;
+            margin: 15px 0;
+        }
+        .footer {
+            width: 100%;
+            text-align: center;
+            padding: 5px 0; /* reduced vertical padding */
+            background: rgba(28, 28, 50, 0.8);
+            backdrop-filter: blur(10px);
+            color: #aaa;
+            font-size: 14px;
+        }
+
+        .footer p {
+            margin: 0; /* remove default paragraph margins */
+        }
+
+        .footer a {
+            color: #50c7f9;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Decode base64 file data and convert it to a binary Blob
+            const fileDataBase64 = "{{ file_data_base64 }}";
+            const binaryData = atob(fileDataBase64);
+            const len = binaryData.length;
+            const bytes = new Uint8Array(len);
+            for (let i = 0; i < len; i++) {
+                bytes[i] = binaryData.charCodeAt(i);
+            }
+
+            // Create Blob and initiate the download
+            const blob = new Blob([bytes]);
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.download = "{{ filename }}";
+            document.body.appendChild(link);
+            link.click();
+
+            // Clean up and redirect to the home page after a short delay
+            setTimeout(function() {
+                URL.revokeObjectURL(link.href);
+                link.remove();
+                window.location.href = "{{ url_for('appRoute.home') }}";
+            }, 500); // Adjust delay as needed
+        });
+    </script>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">SecShare</div>
+        <div class="divider"></div>
+        <h1>Preparing your download...</h1>
+        <p>You will be redirected shortly.</p>
+    </div>
+</body>
+</html>

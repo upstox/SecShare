@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>SecShare</title>
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='favicon.png') }}">
+  <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.png') }}">
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background: radial-gradient(circle at center, #1f1c2c, #302b63, #0f0c29);
+      color: #fff;
+      margin: 0;
+      padding: 0;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    .navbar {
+      width: 100%;
+      background: rgba(28, 28, 50, 0.8);
+      backdrop-filter: blur(10px);
+      padding: 10px 0;
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 10;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 20px;
+      box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.5);
+      height: 60px;
+    }
+
+    .navbar a {
+      color: #50c7f9;
+      text-decoration: none;
+      font-size: 18px;
+      font-weight: bold;
+      padding: 8px 20px;
+      border-radius: 10px;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+    .navbar a:hover {
+      background-color: #50c7f9;
+      color: #fff;
+    }
+
+    /* Updated content spacing & heading style */
+    .content {
+      flex: 1;
+      margin-top: 50px; /* push below navbar */
+      padding: 40px 20px; /* add some room around the main area */
+    }
+
+    /* Flash messages remain unchanged */
+    .flash-success {
+      background-color: rgba(56, 142, 60, 0.95);
+      padding: 15px;
+      margin: 15px auto;
+      width: 80%;
+      border-radius: 10px;
+      color: white;
+      font-weight: bold;
+      font-size: 16px;
+      box-shadow: 0px 0px 10px rgba(56, 142, 60, 0.8);
+      animation: fadeIn 0.5s ease-out;
+    }
+    .flash-error {
+      background-color: rgba(211, 47, 47, 0.95);
+      padding: 15px;
+      margin: 15px auto;
+      width: 80%;
+      border-radius: 10px;
+      color: white;
+      font-weight: bold;
+      font-size: 16px;
+      box-shadow: 0px 0px 10px rgba(211, 47, 47, 0.8);
+      animation: fadeIn 0.5s ease-out;
+    }
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Table layout with subtle box-shadow */
+    table {
+      width: 80%;
+      margin: 0 auto 40px auto; /* unify margin & space from bottom */
+      border-collapse: collapse;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3); /* a gentle box-shadow */
+    }
+    th, td {
+      padding: 15px;
+      border: 1px solid #444;
+    }
+    th {
+      background-color: #50c7f9;
+    }
+    td {
+      background-color: #1e1e1e;
+    }
+
+    /* Pagination block remains unchanged, but we align spacing with table */
+    .pagination {
+      width: 80%;
+      margin: 0 auto 1px auto; 
+      text-align: center;
+    }
+    .pagination a {
+      display: inline-block;
+      background-color: #50c7f9;
+      color: #fff;
+      padding: 8px 16px;
+      margin: 0 5px;
+      border-radius: 5px;
+      text-decoration: none;
+      transition: background-color 0.3s;
+    }
+    .pagination a:hover {
+      background-color: #1cb5e0;
+    }
+    .pagination span {
+      margin: 0 10px;
+      font-weight: bold;
+    }
+
+    /* Footer unchanged except it already merges nicely with above spacing */
+    .footer {
+            width: 100%;
+            text-align: center;
+            padding: 5px 0; /* reduced vertical padding */
+            background: rgba(28, 28, 50, 0.8);
+            backdrop-filter: blur(10px);
+            color: #aaa;
+            font-size: 14px;
+      }
+
+      .footer p {
+          margin: 0; /* remove default paragraph margins */
+      }
+
+      .footer a {
+          color: #50c7f9;
+          text-decoration: none;
+          font-weight: bold;
+      }
+
+      .footer a:hover {
+          text-decoration: underline;
+      }
+  </style>
+
+  <script>
+    setTimeout(function() {
+      const flashElements = document.querySelectorAll('.flash-success, .flash-error, .flash-message');
+      flashElements.forEach(function(el) {
+          el.style.transition = 'opacity 1s ease';
+          el.style.opacity = '0';
+          setTimeout(function() {
+          el.remove();
+          }, 1000);
+      });
+    }, 3000);
+  </script>
+</head>
+<body>
+  <div class="navbar">
+    <a href="{{ url_for('appRoute.home') }}">Home</a>
+    <a href="{{ url_for('appRoute.history') }}">File Upload History</a>
+    <a href="{{ url_for('appRoute.approvals') }}">Approvals</a>
+  </div>
+
+  <div class="content">
+    <!-- Flash messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="flash-{{ category }}">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    <h1>File Upload History</h1>
+    <table>
+      <thead>
+        <tr>
+          <th>File Name</th>
+          <th>Expiry (In days)</th>
+          <th>Status</th>
+          <th>Uploaded On</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for upload in uploads %}
+          <tr>
+            <td>{{ upload.file_name }}</td>
+            <td>{{ upload.ttl }}</td>
+            <td>{{ upload.status }}</td>
+            <td>{{ upload.uploaded_on }}</td>
+          </tr>
+        {% else %}
+          <tr>
+            <td colspan="4">No uploads found</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <!-- PAGINATION BLOCK -->
+    {% if total_pages and total_pages > 1 %}
+      <div class="pagination">
+        <!-- If user is NOT on the first page, show 'Previous' -->
+        {% if page and page > 1 %}
+          <a href="{{ url_for('appRoute.history', page=page-1) }}">«</a>
+        {% endif %}
+
+        <span>Page {{ page }} of {{ total_pages }}</span>
+
+        <!-- If user is NOT on the last page, show 'Next' -->
+        {% if page and page < total_pages %}
+          <a href="{{ url_for('appRoute.history', page=page+1) }}">»</a>
+        {% endif %}
+      </div>
+    {% endif %}
+  </div>
+
+  <div class="footer" style="text-align: center; padding: 17px 0; background: rgba(28, 28, 50, 0.8); backdrop-filter: blur(10px); color: #aaa; font-size: 14px;">
+    <p style="margin: 0;">⚠️ Please share responsibly. Do not upload sensitive or confidential files.</p>
+    <p style="margin: 6px 0 0;">Made with ❤️ by the Security Team</p>
+</div>
+</body>
+</html>

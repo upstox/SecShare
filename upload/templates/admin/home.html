@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>SecShare Admin</title>
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='favicon.png') }}">
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background: radial-gradient(circle at center, #1f1c2c, #302b63, #0f0c29);
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      color: #fff;
+    }
+    .container {
+      background-color: #1e1e1e;
+      padding: 35px;
+      border-radius: 15px;
+      box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.5);
+      width: 90%;
+      max-width: 500px;
+      text-align: center;
+    }
+    /* Generic flash message (fallback) */
+    .flash-message {
+      background-color: #ff4d4d;
+      color: white;
+      padding: 10px;
+      border-radius: 10px;
+      font-weight: bold;
+      text-align: center;
+      margin-bottom: 20px;
+      box-shadow: 0px 0px 15px rgba(255, 77, 77, 0.5);
+    }
+    /* Success flash messages (green) */
+    .flash-success {
+      background-color: rgba(56, 142, 60, 0.95);
+      color: white;
+      padding: 10px;
+      border-radius: 10px;
+      font-weight: bold;
+      text-align: center;
+      margin-bottom: 20px;
+      box-shadow: 0px 0px 15px rgba(56, 142, 60, 0.5);
+    }
+    /* Error flash messages (red) */
+    .flash-error {
+      background-color: rgba(211, 47, 47, 0.95);
+      color: white;
+      padding: 10px;
+      border-radius: 10px;
+      font-weight: bold;
+      text-align: center;
+      margin-bottom: 20px;
+      box-shadow: 0px 0px 15px rgba(211, 47, 47, 0.5);
+    }
+    .logo {
+      font-size: 24px;
+      font-weight: 600;
+      color: #50c7f9;
+      margin-bottom: 15px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      text-shadow: 0 0 8px rgba(80, 199, 249, 0.7);
+    }
+    .nav-links {
+      margin: 20px 0;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .nav-links a {
+      display: block;
+      color: #50c7f9;
+      text-decoration: none;
+      font-size: 18px;
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid #50c7f9;
+      transition: all 0.3s ease;
+    }
+    .nav-links a:hover {
+      background-color: #50c7f9;
+      color: #fff;
+      transform: scale(1.05);
+      box-shadow: 0px 5px 15px rgba(80, 199, 249, 0.4);
+    }
+    @media (max-width: 500px) {
+      .container {
+        padding: 25px;
+      }
+      .logo {
+        font-size: 22px;
+      }
+      .nav-links a {
+        font-size: 14px;
+        padding: 10px;
+      }
+    }
+    .footer {
+            width: 100%;
+            text-align: center;
+            padding: 5px 0; /* reduced vertical padding */
+            background: rgba(28, 28, 50, 0.8);
+            backdrop-filter: blur(10px);
+            color: #aaa;
+            font-size: 14px;
+    }
+
+    .footer p {
+        margin: 0; /* remove default paragraph margins */
+    }
+
+    .footer a {
+        color: #50c7f9;
+        text-decoration: none;
+        font-weight: bold;
+    }
+
+    .footer a:hover {
+        text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          {% if category == 'success' %}
+            <div class="flash-success">{{ message }}</div>
+          {% elif category == 'error' %}
+            <div class="flash-error">{{ message }}</div>
+          {% else %}
+            <div class="flash-message">{{ message }}</div>
+          {% endif %}
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+    <div class="logo">Admin Panel</div>
+    <div class="nav-links">
+      <a href="{{ url_for('adminRoute.employee_manager_details') }}">Employee Manager Details</a>
+      <a href="{{ url_for('adminRoute.file_metadata') }}">File Metadata</a>
+      <a href="{{ url_for('adminRoute.file_metadata_archive') }}">File Metadata Archive</a>
+      <a href="{{ url_for('adminRoute.update_manager_email') }}">Update Manager Email</a>
+    </div>
+  </div>
+
+  <script>
+    // Wait 3 seconds, then fade out flash messages over 1 second and remove them.
+    setTimeout(function() {
+      const flashElements = document.querySelectorAll('.flash-success, .flash-error, .flash-message');
+      flashElements.forEach(function(el) {
+        el.style.transition = 'opacity 1s ease';
+        el.style.opacity = '0';
+        setTimeout(function() {
+          el.remove();
+        }, 1000);
+      });
+    }, 3000);
+  </script>
+</body>
+</html>
