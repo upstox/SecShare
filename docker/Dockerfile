@@ -6,7 +6,7 @@ RUN mkdir -p /opt/company/${ARTIFACT_ID}
 
 WORKDIR /opt/company/${ARTIFACT_ID}
 
-COPY --chown=upstox:upstox . .
+COPY --chown=company:company . .
 
 RUN pip install --no-cache-dir -r requirements.txt
 

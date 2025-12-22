@@ -1,0 +1,62 @@
+uat:
+  secrets:
+    secret_name: "arn:aws:secretsmanager:ap-south-1:8323723232:secret:security/uat/secshare-file-sharing-tool-SDSSFS"
+    region_name: "ap-south-1"
+  s3:
+    bucket_name: "secshare-uat-secshare-appsec"
+    region: "ap-south-1"
+  db:
+    mysql:
+      writer_host: "secshare-file-sharing-tool-mysql-uat-local.uat1.secshare.com"
+      reader_host: "secshare-file-sharing-tool-ro-mysql-uat-local.uat1.secshare.com"
+      writer_user: "secshare_user"
+      reader_user: "secshare_user"
+      database: "secshare_database"
+      port: 3306
+  azure:
+    client_id: "021232ef-6gd0-41s7-271a-7cbafa1e412a"
+    tenant_id: "8151e3f1-39fd-4af1-8621-12e1db3eaf1b"
+  azure_details:
+    client_id: "11391f8c-1av9-3avf-1230-1a2b345c420"
+  mail:
+    mail_port: 465
+    mail_server: "email-smtp.ap-southeast-1.amazonaws.com"
+  turnstile:
+    site_key: "0x4AAasdaddsfdsfdssdfNtHm"
+  file:
+    max_size: 5221225472 #3GB 3*1024*1024*1024
+    allowed_extensions: "pdf,jpg,jpeg,png,txt,zip,csv,docx,doc,mov,xlsx,iso,mp4"
+  admin_access:
+    users: "adminuser.1@company.com, adminuser.2@company.com, adminuser.3@company.com"
+
+prod:
+  secrets:
+    secret_name: "arn:aws:secretsmanager:ap-south-1:8323723232:secret:security/prod/secshare-file-sharing-tool-SDSSFS"
+    region_name: "ap-south-1"
+  s3:
+    bucket_name: "secshare-secshare-appsec"
+    region: "ap-south-1"
+  db:
+    mysql:
+      writer_host: "secshare-file-sharing-tool-mysql-prod-local.prod.secshare.com"
+      reader_host: "secshare-file-sharing-tool-ro-mysql-prod-local.prod.secshare.com"
+      writer_user: "secshare_user"
+      reader_user: "secshare_user_ro"
+      database: "secshare"
+      port: 3306
+  azure:
+    client_id: "11391f8c-1av9-3avf-1230-1a2b345c420"
+    tenant_id: "8151e3f1-39fd-4af1-8621-12e1db3eaf1b"
+  azure_details:
+    client_id: "11391f8c-1av9-3avf-1230-1a2b345c420"
+  mail:
+    mail_port: 465
+    mail_server: "email-smtp.ap-southeast-1.amazonaws.com"
+  turnstile:
+    site_key: "0x4ABBBBBBAkyCFrmpxzE_aXI"
+  file:
+    max_size: 5221225472 #3GB 3*1024*1024*1024
+    allowed_extensions: "pdf,jpg,jpeg,png,txt,zip,csv,docx,doc,mov,xlsx,iso,mp4"
+  admin_access:
+    users: "adminuser.1@company.com, adminuser.2@company.com, adminuser.3@company.com"
+
