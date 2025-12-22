@@ -76,7 +76,7 @@ SecShare follows a **dual-application MVC architecture** pattern, separating int
 
 ### Architecture Diagram
 
-![Architecture Diagram](os_assets/Screenshot%202025-12-10%20at%206.21.59%20PM.png)
+![Architecture Diagram](os_assets/Screenshot%202025-12-10%20at%206.21.59%E2%80%AFPM.png)
 
 ### Component Overview
 
@@ -171,38 +171,38 @@ SecShare follows a **dual-application MVC architecture** pattern, separating int
 ### Upload Portal
 
 #### Home Page - File Upload Interface
-![Upload Home](os_assets/Screenshot%202025-12-04%20at%2010.17.33%20AM.png)
+![Upload Home](os_assets/Screenshot%202025-12-04%20at%2010.17.33%E2%80%AFAM.png)
 
 #### Upload History
-![Upload History](os_assets/Screenshot%202025-12-04%20at%2010.19.33%20AM.png)
+![Upload History](os_assets/Screenshot%202025-12-04%20at%2010.19.58%E2%80%AFAM.png)
 
 #### Manager Approvals Dashboard
-![Approvals Dashboard](os_assets/Screenshot%202025-12-04%20at%2010.19.41%20AM.png)
+![Approvals Dashboard](os_assets/Screenshot%202025-12-04%20at%2010.19.41%E2%80%AFAM.png)
 
 #### Approval Details View
-![Approval Details](os_assets/Screenshot%202025-12-04%20at%2010.19.58%20AM.png)
+![Approval Details](os_assets/Screenshot%202025-12-04%20at%2010.19.58%E2%80%AFAM.png)
 
 #### Admin Interface
-![Admin Interface](os_assets/Screenshot%202025-12-04%20at%2010.20.20%20AM.png)
+![Admin Interface](os_assets/Screenshot%202025-12-17%20at%2010.39.05%E2%80%AFAM.png)
 
 ### Download Portal
 
 #### Password Prompt
-![Password Prompt](os_assets/Screenshot%202025-12-04%20at%2010.21.28%20AM.png)
+![Password Prompt](os_assets/Screenshot%202025-12-04%20at%2010.21.28%E2%80%AFAM.png)
 
 #### Download Interface
-![Download Interface](os_assets/Screenshot%202025-12-04%20at%2010.21.56%20AM.png)
+![Download Interface](os_assets/Screenshot%202025-12-04%20at%2010.21.56%E2%80%AFAM.png)
 
 ### Additional Views
 
 #### Processing Status
-![Processing](os_assets/Screenshot%202025-12-10%20at%205.14.42%20PM.png)
+![Processing](os_assets/Screenshot%202025-12-10%20at%205.14.42%E2%80%AFPM.png)
 
 #### Manager Email Update
-![Manager Email Update](os_assets/Screenshot%202025-12-10%20at%205.16.38%20PM.png)
+![Manager Email Update](os_assets/Screenshot%202025-12-10%20at%205.16.38%E2%80%AFPM.png)
 
 #### File Metadata View
-![File Metadata](os_assets/Screenshot%202025-12-10%20at%205.19.36%20PM.png)
+![File Metadata](os_assets/Screenshot%202025-12-10%20at%205.19.36%E2%80%AFPM.png)
 
 ## 🚀 Getting Started
 
