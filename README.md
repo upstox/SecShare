@@ -23,6 +23,7 @@
 - [Project Structure](#project-structure)
 - [Deployment](#deployment)
 - [Contributing](#contributing)
+- [Contributors](#contributors)
 - [License](#license)
 
 ---
